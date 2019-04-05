@@ -1,0 +1,75 @@
+# Configured to be used with https://github.com/wodby/docker4drupal.
+#
+# Profile level
+default:
+  extensions:
+    Behat\MinkExtension:
+      base_url: "http://nginx"
+      browser_name: 'chrome'
+      sessions:
+        default:
+          selenium2:
+            wd_host: http://selenium:4444/wd/hub
+
+    Drupal\DrupalExtension:
+      blackbox: ~
+      api_driver: 'drush'
+      drush:
+        alias: '@docker-local'
+      drupal:
+        drupal_root: '/var/www/html/web'
+      selectors:
+        message_selector: '.messages'
+        error_message_selector: '.messages.messages--error'
+        success_message_selector: '.messages.messages--status'
+      region_map:
+        header: '.region.region-header'
+        breadcrumb: '.region.region-breadcrumb'
+        help: '.region.region-help'
+        sidebar: '.region.region-sidebar'
+        content: '.region.region-content'
+        footer: '.region.region-footer'
+        landing_page: '.region.region-landing-page'
+
+    Bex\Behat\ScreenshotExtension:
+      # screenshot_taking_mode: failed_steps , failed_scenarios , all_scenarios
+      screenshot_taking_mode: failed_steps
+      image_drivers:
+        local:
+          screenshot_directory: '/var/www/html/tests/behat/artifacts/screenshots'
+          clear_screenshot_directory: true
+
+    SensioLabs\Behat\PageObjectExtension: ~
+
+  # Suite level
+  suites:
+    editor-all-corners:
+      paths:
+        - '/var/www/html/tests/behat/features/editor-all-corners'
+      contexts:
+        - Drupal\DrupalExtension\Context\DrushContext: ~
+        - Drupal\DrupalExtension\Context\MinkContext: ~
+        - Drupal\DrupalExtension\Context\DrupalContext: ~
+        - Drupal\DrupalExtension\Context\MarkupContext: ~
+        - Drupal\DrupalExtension\Context\MessageContext: ~
+        - UserContext: ~
+        - NodeContext: ~
+        - FeatureContext: ~
+
+    content-creator:
+      paths:
+        - '/var/www/html/tests/behat/features/content-creator'
+
+    content-manager:
+      paths:
+        - '/var/www/html/tests/behat/features/content-manager'
+
+    editor-employment-and-career-corner:
+      paths:
+        - '/var/www/html/tests/behat/features/editor-employment-and-career-corner'
+
+    editor-premises-corner:
+      paths:
+        - '/var/www/html/tests/behat/features/editor-premises-corner'
+
+  # Additional config of this profile

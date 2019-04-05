@@ -1,0 +1,11 @@
+version: "3"
+
+# Tested with the following environment:
+#   Docker version 18.03.1-ce, build 9ee9f40 [Installed via apt-get]
+#   docker-compose version 1.21.2, build a133471 [Installed via python pip]
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:3.12.0-cobalt
+    volumes:
+      - /dev/shm:/dev/shm
