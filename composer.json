@@ -1,0 +1,55 @@
+{
+    "name": "brainsum/drupal-behat-testing",
+    "description": "Drupal testing with Behat.",
+    "type": "behat-extension",
+    "keywords": ["drupal", "web", "test", "brainsum", "behat","extension","bdd"],
+    "homepage": "https://github.com/brainsum/drupal-behat-testing",
+    "require": {
+        "php": "^7.2",
+        "ext-json": "*",
+        "ext-zip": "*",
+        "behat/behat": "^3.5",
+        "behat/debug-extension": "^1.0",
+        "behat/mink": "^1.7",
+        "behat/mink-browserkit-driver": "^1.3",
+        "behat/mink-extension": "^2.3",
+        "behat/mink-goutte-driver": "^1.2",
+        "behat/mink-selenium2-driver": "^1.3",
+        "bex/behat-screenshot": "^1.2",
+        "ciaranmcnulty/behat-stepthroughextension": "^1.0",
+        "drupal/core": "^8.4",
+        "drupal/drupal-extension": "^3.4",
+        "facebook/webdriver": "^1.6",
+        "jcalderonzumba/gastonjs": "^1.2",
+        "jcalderonzumba/mink-phantomjs-driver": "^0.3.3",
+        "novaway/common-contexts": "^2.3",
+        "phpunit/phpunit": "^6.0",
+        "sensiolabs/behat-page-object-extension": "^2.1",
+        "symfony/console": "^3.0",
+        "vanare/behat-cucumber-json-formatter": "^1.1"
+    },
+    "require-dev": {
+        "bossa/phpspec2-expect": "^3.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "drupal/coder": "^8.3",
+        "jakub-onderka/php-parallel-lint": "^1.0",
+        "phpcompatibility/php-compatibility": "^9.1"
+    },
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "mhavelant",
+            "email": "mhavelant@brainsum.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainsum\\DrupalBehatTesting\\": "src"
+        }
+    }
+}
