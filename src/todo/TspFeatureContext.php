@@ -2,7 +2,7 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
-use Brainsum\DrupalBehatTesting\Helper\TspPageResolverTrait;
+use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Drupal;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -18,7 +18,17 @@ use function sleep;
  */
 class TspFeatureContext extends TietoContext {
 
-  use TspPageResolverTrait;
+  use PageResolverTrait;
+
+  /**
+   * ElFeatureContext constructor.
+   *
+   * @param string $pageMapFilePath
+   *   Pathname for the map config file.
+   */
+  public function __construct(string $pageMapFilePath) {
+    $this->loadPageMapping($pageMapFilePath);
+  }
 
   //  /**
   //   * @When /^(?:|I )fill in select2 input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
@@ -61,7 +71,7 @@ class TspFeatureContext extends TietoContext {
   /**
    * @Then I edit a node under :parent corner with keyword :keyword
    */
-  public function iEditANodeUnderCornerWithKeyword($parent, $keyword) {
+  public function iEditANodeUnderParentWithKeyword($parent, $keyword): void {
 
     if (strlen($parent) > 1) {
       $query = Drupal::entityQuery('node')
@@ -98,19 +108,25 @@ class TspFeatureContext extends TietoContext {
       $term_id = $term->id();
     }
 
-    $node = Node::create([
+
+    $nodeValues = [
       'type' => 'page',
       'title' => 'Behat: Test ' . $parent,
       'body' => 'test body ' . $parent,
       'field_description' => 'Automated test for ' . $parent,
       'status' => 1,
       'field_keyword' => $term_id,
-      'book' => isset($book) ? $book : "",
-    ]);
+    ];
+
+    if (!empty($book)) {
+      $nodeValues['book'] = $book;
+    }
+
+    $node = Node::create($nodeValues);
     $node->save();
 
-    if (!($node->nid)) {
-      throw new Exception("Node creation failed!");
+    if (!$node->nid) {
+      throw new Exception('Node creation failed!');
     }
 
     $this->visitPath('/node/' . $node->get('nid')->value . '/edit');
@@ -123,7 +139,7 @@ class TspFeatureContext extends TietoContext {
    *
    * @Then I expand :arg1
    */
-  public function iExpand($arg1) {
+  public function iExpand($arg1): void {
     $session = $this->getSession();
     $page = $session->getPage();
 
@@ -149,7 +165,7 @@ class TspFeatureContext extends TietoContext {
    *
    * @Then I check the :arg1
    */
-  public function iCheckThe($arg1) {
+  public function iCheckThe($arg1): void {
     $session = $this->getSession();
     $page = $session->getPage();
 
@@ -175,7 +191,7 @@ class TspFeatureContext extends TietoContext {
    *
    * @Then I enter :value for :field on modal popup
    */
-  public function iEnterValueForFieldOnModalPopup($value, $field) {
+  public function iEnterValueForFieldOnModalPopup($value, $field): void {
     $session = $this->getSession();
     $page = $session->getPage();
 
@@ -201,7 +217,7 @@ class TspFeatureContext extends TietoContext {
    * @Then I enter :value for :field on modal popup and select from
    *   autocomplete
    */
-  public function iEnterValueForFieldOnModalPopupAndSelectFromAutocomplete($value, $field) {
+  public function iEnterValueForFieldOnModalPopupAndSelectFromAutocomplete($value, $field): void {
     $session = $this->getSession();
     $driver = $session->getDriver();
     $page = $session->getPage();
@@ -254,7 +270,7 @@ class TspFeatureContext extends TietoContext {
    *
    * @Then I press the :type button and add the text :text in content area
    */
-  public function iPressTheButtonAndAddTheTextInContentArea($type, $text) {
+  public function iPressTheButtonAndAddTheTextInContentArea($type, $text): void {
     $session = $this->getSession();
     $page = $session->getPage();
     $type = strtolower($type);
@@ -467,7 +483,7 @@ class TspFeatureContext extends TietoContext {
 
     $button->click();
 
-    if ($style == 'heading') {
+    if ($style === 'heading') {
       $frame_id = $page->find('css', '.cke_combopanel .cke_panel_frame')
         ->getAttribute('id');
 
@@ -476,7 +492,6 @@ class TspFeatureContext extends TietoContext {
       }
 
       $session->switchToIFrame($frame_id);
-      $session = $this->getSession();
       $page = $session->getPage();
       $style_to_select = $page->find('css', $style_selector);
 
@@ -485,12 +500,11 @@ class TspFeatureContext extends TietoContext {
       }
       $style_to_select->click();
       $session->switchToIFrame(NULL);
-      $session = $this->getSession();
       $page = $session->getPage();
     }
 
     $session->executeScript('jQuery(".cke_wysiwyg_frame").attr("id","test-cke-iframe");');
-    $session->switchToIframe('test-cke-iframe');
+    $session->switchToIFrame('test-cke-iframe');
 
     $frame_session = $this->getSession();
     $frame_page = $frame_session->getPage();
@@ -520,7 +534,7 @@ class TspFeatureContext extends TietoContext {
    *
    * @Then I open the :image upload form and fill it in
    */
-  public function iOpenTheUploadFormAndFillItIn($image) {
+  public function iOpenTheUploadFormAndFillItIn($image): void {
     $time = 5000;
     $session = $this->getSession();
     $page = $session->getPage();
@@ -597,7 +611,7 @@ class TspFeatureContext extends TietoContext {
     $this->getSession()->wait($time, '(0 === jQuery.active)');
 
     $session->executeScript('jQuery(".cke_wysiwyg_frame").attr("id","test-cke-iframe");');
-    $session->switchToIframe('test-cke-iframe');
+    $session->switchToIFrame('test-cke-iframe');
     $session = $this->getSession();
     $page = $session->getPage();
     $test = $page->find('css', $test_selector);

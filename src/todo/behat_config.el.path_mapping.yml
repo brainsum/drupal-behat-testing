@@ -1,0 +1,3 @@
+'Home':
+  route_name: 'home'
+  path: '/home'
