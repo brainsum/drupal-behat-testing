@@ -3,12 +3,11 @@
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
 use Behat\Mink\Driver\DriverInterface;
+use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Brainsum\DrupalBehatTesting\Helper\SpinTrait;
 use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
-use RuntimeException;
-use function strtolower;
 
 /**
  * Class GenericContext.
@@ -19,6 +18,17 @@ class GenericContext extends RawDrupalContext {
 
   use SpinTrait;
   use ViewportTrait;
+  use PageResolverTrait;
+
+  /**
+   * ElFeatureContext constructor.
+   *
+   * @param string $pageMapFilePath
+   *   Pathname for the map config file.
+   */
+  public function __construct(string $pageMapFilePath) {
+    $this->loadPageMapping($pageMapFilePath);
+  }
 
   /**
    * {@inheritdoc}
@@ -36,7 +46,7 @@ class GenericContext extends RawDrupalContext {
    * @Then I visit the :pageName page
    */
   public function iVisitThePage(string $pageName): void {
-    $this->visitPath($this->pathForPage($pageName));
+    $this->visitPath($this->resolvePageNameToPath($pageName));
   }
 
   /**
@@ -49,7 +59,7 @@ class GenericContext extends RawDrupalContext {
    * @Given I am on the :pageName page
    */
   public function iAmOnThePage(string $pageName): void {
-    $path = $this->pathForPage($pageName);
+    $path = $this->resolvePageNameToPath($pageName);
 
     $currentPath = parse_url(
       $this->getSession()->getCurrentUrl(),
@@ -57,34 +67,6 @@ class GenericContext extends RawDrupalContext {
     );
 
     Assert::assertSame($path, $currentPath);
-  }
-
-  /**
-   * Return path for page name.
-   *
-   * @param string $pageName
-   *   Name of the page.
-   *
-   * @return string
-   *   Name of the path.
-   *
-   * @todo: FIXME.
-   */
-  protected function pathForPage(string $pageName): string {
-    $pageName = strtolower($pageName);
-
-    switch ($pageName) {
-      case 'Home':
-        return $this->pageNameToPath('home');
-
-      case 'Page add':
-        return $this->pageNameToPath('page_add');
-
-      case 'Landing pages':
-        return $this->pageNameToPath('entity.landing_page.collection');
-    }
-
-    throw new RuntimeException("Path for the given page '$pageName' not found.");
   }
 
   /**

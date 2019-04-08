@@ -2,7 +2,6 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
-use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -15,18 +14,7 @@ use function reset;
  */
 class ElFeatureContext extends TietoContext {
 
-  use PageResolverTrait;
   use PreviousNodeTrait;
-
-  /**
-   * ElFeatureContext constructor.
-   *
-   * @param string $pageMapFilePath
-   *   Pathname for the map config file.
-   */
-  public function __construct(string $pageMapFilePath) {
-    $this->loadPageMapping($pageMapFilePath);
-  }
 
   /**
    * Node creation.
