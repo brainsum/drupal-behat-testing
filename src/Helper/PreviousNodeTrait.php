@@ -2,10 +2,12 @@
 
 namespace Brainsum\DrupalBehatTesting\Helper;
 
+use Behat\Behat\Hook\Scope\AfterStepScope;
 use Drupal;
 use Drupal\node\NodeInterface;
 use Exception;
 use RuntimeException;
+use function count;
 
 /**
  * Class PreviousNodeTrait.
@@ -20,6 +22,21 @@ trait PreviousNodeTrait {
    * @var \Drupal\node\NodeInterface
    */
   protected $previousNode;
+
+  /**
+   * Remove the previous node, if exists.
+   *
+   * @AfterStep
+   */
+  public function previousNodeCleanup(AfterStepScope $scope): void {
+    if (
+      $this->previousNode() !== NULL
+      && $scope->getTestResult()->getResultCode() === 99
+    ) {
+      $this->previousNode()->delete();
+      echo "Cleanup executed after failed step, deleted node: {$this->previousNode()->id()}";
+    }
+  }
 
   /**
    * Set the previous node.
@@ -89,6 +106,31 @@ trait PreviousNodeTrait {
 
     $this->previousNode = $node;
     return $this->previousNode;
+  }
+
+  /**
+   * Then I :action previously created node.
+   *
+   * @Then I :action previously created node
+   */
+  public function iPreviouslyCreatedNode(string $action): void {
+    $fragment = $action === 'view' ? '' : '/edit';
+    $this->visitPath("/node/{$this->previousNode()->id()}{$fragment}");
+  }
+
+  /**
+   * Then I should not see the previously created node.
+   *
+   * @Then I should not see the previously created node
+   */
+  public function iShouldNotSeeThePreviouslyCreatedNode(): void {
+    $page = $this->getSession()->getPage();
+    $title = $this->previousNode()->get('title')->value;
+    $nodes = $page->findAll('xpath', '//html[text()="' . $title . '"]');
+
+    if (count($nodes) > 0) {
+      throw new RuntimeException('Node not found on rss feed!');
+    }
   }
 
 }

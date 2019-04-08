@@ -121,14 +121,4 @@ class ElFeatureContext extends TietoContext {
     }
   }
 
-  /**
-   * Then I :action previously created node.
-   *
-   * @Then I :action previously created node
-   */
-  public function iPreviouslyCreatedNode(string $action): void {
-    $fragment = $action === 'view' ? '' : '/edit';
-    $this->visitPath("/node/{$this->previousNode()->id()}{$fragment}");
-  }
-
 }
