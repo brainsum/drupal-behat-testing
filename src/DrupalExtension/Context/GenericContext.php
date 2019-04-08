@@ -2,13 +2,13 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
-use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Driver\DriverInterface;
 use Brainsum\DrupalBehatTesting\Helper\SpinTrait;
+use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 use RuntimeException;
 use function strtolower;
-use function file_put_contents;
 
 /**
  * Class GenericContext.
@@ -18,17 +18,13 @@ use function file_put_contents;
 class GenericContext extends RawDrupalContext {
 
   use SpinTrait;
+  use ViewportTrait;
 
   /**
-   * Set viewport size.
-   *
-   * @BeforeStep
+   * {@inheritdoc}
    */
-  public function beforeStep(): void {
-    $driver = $this->getSession()->getDriver();
-    if ($driver instanceof Selenium2Driver) {
-      $driver->resizeWindow(1920, 4000, 'current');
-    }
+  protected function sessionDriver(): DriverInterface {
+    return $this->getSession()->getDriver();
   }
 
   /**
