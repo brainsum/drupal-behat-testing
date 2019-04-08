@@ -8,6 +8,10 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
 use Exception;
 use ZipArchive;
+use function reset;
+use function strlen;
+use function strtolower;
+use function sleep;
 
 /**
  * Defines application features from the specific context.

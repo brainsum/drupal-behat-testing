@@ -9,6 +9,7 @@ use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use RuntimeException;
+use function reset;
 
 /**
  * Defines application features from the specific context.
