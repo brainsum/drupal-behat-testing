@@ -44,21 +44,6 @@ class ElRssContext extends RawDrupalContext {
   }
 
   /**
-   * Remove the previous node, if exists.
-   *
-   * @AfterStep
-   */
-  public function after(AfterStepScope $scope): void {
-    if (
-      $this->previousNode() !== NULL
-      && $scope->getTestResult()->getResultCode() === 99
-    ) {
-      $this->previousNode()->delete();
-      echo "Cleanup executed after failed step, deleted node: {$this->previousNode()->id()}";
-    }
-  }
-
-  /**
    * @When I click Generate RSS URL submit button
    */
   public function iClickGenerateRssUrlSubmitButton(): void {
@@ -69,20 +54,7 @@ class ElRssContext extends RawDrupalContext {
       ->click();
   }
 
-  /**
-   * @Then I should not see the previously created node
-   */
-  public function iShouldNotSeeThePreviouslyCreatedNode(): void {
-    $page = $this->getSession()->getPage();
 
-    $title = $this->previousNode()->get('title')->value;
-
-    $nodes = $page->findAll('xpath', '//html[text()="' . $title . '"]');
-
-    if (count($nodes) > 0) {
-      throw new RuntimeException('Node not found on rss feed!');
-    }
-  }
 
   /**
    * Then the RSS date should be the :dateType date.
