@@ -6,7 +6,7 @@ use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Drupal;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
-use Exception;
+use RuntimeException;
 use ZipArchive;
 use function reset;
 use function strlen;
@@ -30,44 +30,6 @@ class TspFeatureContext extends TietoContext {
     $this->loadPageMapping($pageMapFilePath);
   }
 
-  //  /**
-  //   * @When /^(?:|I )fill in select2 input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
-  //   *
-  //   * @todo: Refactor according to community context
-  //   * @see: https://github.com/novaway/BehatCommonContext
-  //   */
-  //  public function iFillInSelectInputWithAndSelect($field, $value, $entry) {
-  //    $page = $this->getSession()->getPage();
-  //
-  //    $inputField = $page->find('css', $field);
-  //    if (!$inputField) {
-  //      throw new \RuntimeException('No field found');
-  //    }
-  //
-  //    $choice = $inputField->getParent()->find('css', '.select2-selection');
-  //    if (!$choice) {
-  //      throw new \RuntimeException('No select2 choice found');
-  //    }
-  //    $choice->press();
-  //
-  //    $select2Input = $page->find('css', '.select2-search__field');
-  //    if (!$select2Input) {
-  //      throw new \RuntimeException('No input found');
-  //    }
-  //    $select2Input->setValue($value);
-  //
-  //    $this->getSession()->wait(1000);
-  //
-  //    $chosenResults = $page->findAll('css', '.select2-results li');
-  //    /** @var \Behat\Mink\Element\NodeElement $result */
-  //    foreach ($chosenResults as $result) {
-  //      if ($result->getText() === $entry) {
-  //        $result->click();
-  //        break;
-  //      }
-  //    }
-  //  }
-
   /**
    * @Then I edit a node under :parent corner with keyword :keyword
    */
@@ -81,7 +43,7 @@ class TspFeatureContext extends TietoContext {
       $nids = $query->execute();
 
       if (empty($nids)) {
-        throw new Exception("The given parent was not found.. ('$parent')");
+        throw new RuntimeException("The given parent was not found.. ('$parent')");
       }
 
       $corner_id = reset($nids);
@@ -126,7 +88,7 @@ class TspFeatureContext extends TietoContext {
     $node->save();
 
     if (!$node->nid) {
-      throw new Exception('Node creation failed!');
+      throw new RuntimeException('Node creation failed!');
     }
 
     $this->visitPath('/node/' . $node->get('nid')->value . '/edit');
@@ -146,13 +108,13 @@ class TspFeatureContext extends TietoContext {
     $element = $page->find('css', 'span:contains("' . $arg1 . '")');
 
     if (!$element) {
-      throw new Exception("Element containing: $arg1 not found");
+      throw new RuntimeException("Element containing: $arg1 not found");
     }
 
     $extender = $element->getParent()->find('css', '.book-list-item-expander');
 
     if (!$extender) {
-      throw new Exception("Drop down arrow not found for $arg1");
+      throw new RuntimeException("Drop down arrow not found for $arg1");
     }
 
     $extender->click();
@@ -172,13 +134,13 @@ class TspFeatureContext extends TietoContext {
     $element = $page->find('css', 'span:contains("' . $arg1 . '")');
 
     if (!$element) {
-      throw new Exception("Element containing: $arg1 not found");
+      throw new RuntimeException("Element containing: $arg1 not found");
     }
 
     $extender = $element->getParent()->find('css', '.book-list-item-checkbox');
 
     if (!$extender) {
-      throw new Exception("Select for: $arg1 not found");
+      throw new RuntimeException("Select for: $arg1 not found");
     }
 
     $extender->click();
@@ -197,13 +159,13 @@ class TspFeatureContext extends TietoContext {
 
     $element = $page->find('css', 'input[name="' . $field . '"]');
     if (!isset($element)) {
-      throw new Exception("Element not found with the given CSS selector: $field");
+      throw new RuntimeException("Element not found with the given CSS selector: $field");
     }
     $element->setValue($value);
     // Assertion
     $check = $element->getValue();
     if (!$check) {
-      throw new Exception("Value was not set in the input field with the given CSS selector: $field");
+      throw new RuntimeException("Value was not set in the input field with the given CSS selector: $field");
     }
   }
 
@@ -224,7 +186,7 @@ class TspFeatureContext extends TietoContext {
 
     $element = $page->find('css', 'input[name="' . $field . '"]');
     if (!isset($element)) {
-      throw new Exception("Element not found with the given CSS selector: $field");
+      throw new RuntimeException("Element not found with the given CSS selector: $field");
     }
 
     $element->focus();
@@ -478,7 +440,7 @@ class TspFeatureContext extends TietoContext {
 
     $button = $page->find('css', $button_selector);
     if (!$button) {
-      throw new Exception("$button_selector not found");
+      throw new RuntimeException("$button_selector not found");
     }
 
     $button->click();
@@ -488,7 +450,7 @@ class TspFeatureContext extends TietoContext {
         ->getAttribute('id');
 
       if (!$frame_id) {
-        throw new Exception('Styles select not found');
+        throw new RuntimeException('Styles select not found');
       }
 
       $session->switchToIFrame($frame_id);
@@ -496,7 +458,7 @@ class TspFeatureContext extends TietoContext {
       $style_to_select = $page->find('css', $style_selector);
 
       if (!$style_selector) {
-        throw new Exception("Style selector: $type was not found");
+        throw new RuntimeException("Style selector: $type was not found");
       }
       $style_to_select->click();
       $session->switchToIFrame(NULL);
@@ -519,7 +481,7 @@ class TspFeatureContext extends TietoContext {
 
     $check = $frame_page->find('css', $selector . ':contains("' . $text . '")');
     if (!$check) {
-      throw new Exception('Element not found');
+      throw new RuntimeException('Element not found');
     }
     $session->switchToIFrame(NULL);
     $session = $this->getSession();
@@ -617,7 +579,7 @@ class TspFeatureContext extends TietoContext {
     $test = $page->find('css', $test_selector);
 
     if (!$test) {
-      throw new Exception('Image did not add correctly');
+      throw new RuntimeException('Image did not add correctly');
     }
 
     $session->switchToIFrame(NULL);

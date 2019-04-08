@@ -337,14 +337,17 @@ class TietoContext extends GenericContext {
       ->executeScript("CKEDITOR.instances[\"$fieldId\"].setData(\"$value\");");
   }
 
-
   /**
    * Then I fill in select2 input ":field" with ":value" and select ":entry".
    *
    * @Then I fill in select2 input ":field" with ":value" and select ":entry"
+   *
+   * @todo: Refactor according to community context
+   * @see: https://github.com/novaway/BehatCommonContext
    */
   public function iFillInSelect2InputWithAndSelect($field, $value, $entry): void {
-    $page = $this->getSession()->getPage();
+    $session = $this->getSession();
+    $page = $session->getPage();
 
     $inputField = $page->findField($field);
     if (NULL === $inputField) {
@@ -361,7 +364,7 @@ class TietoContext extends GenericContext {
     }
     $select2Input->setValue($value);
 
-    $this->getSession()->wait(1000);
+    $session->wait(1000);
 
     $chosenResults = $page->findAll('css', '.select2-results li');
     /** @var \Behat\Mink\Element\NodeElement $result */
