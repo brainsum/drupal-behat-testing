@@ -3,7 +3,7 @@
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
 use Behat\Behat\Tester\Exception\PendingException;
-use Brainsum\DrupalBehatTesting\Helper\ElPageResolverTrait;
+use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -16,8 +16,18 @@ use function reset;
  */
 class ElFeatureContext extends TietoContext {
 
-  use ElPageResolverTrait;
+  use PageResolverTrait;
   use PreviousNodeTrait;
+
+  /**
+   * ElFeatureContext constructor.
+   *
+   * @param string $pageMapFilePath
+   *   Pathname for the map config file.
+   */
+  public function __construct(string $pageMapFilePath) {
+    $this->loadPageMapping($pageMapFilePath);
+  }
 
   /**
    * Node creation.
@@ -46,8 +56,7 @@ class ElFeatureContext extends TietoContext {
     }
     $termId = $term->id();
 
-    $session = $this->getSession();
-    $page = $session->getPage();
+    $page = $this->getSession()->getPage();
 
     switch ($status) {
       case 'published':
@@ -144,7 +153,7 @@ class ElFeatureContext extends TietoContext {
    *
    * @Then I should see the text :title and :date
    */
-  public function iShouldSeeTheTextAnd($title, $date) {
+  public function iShouldSeeTheTextAnd($title, $date): void {
     throw new PendingException();
 
     $page = $this->getSession()->getPage();

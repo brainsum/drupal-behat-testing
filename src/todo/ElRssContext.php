@@ -2,10 +2,11 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
+use Behat\Mink\Driver\DriverInterface;
+use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
 use Brainsum\DrupalBehatTesting\Helper\SpinTrait;
-use Brainsum\DrupalBehatTesting\Helper\ElPageResolverTrait;
-use Behat\Mink\Driver\Selenium2Driver;
+use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -20,8 +21,26 @@ use RuntimeException;
 class ElRssContext extends RawDrupalContext {
 
   use SpinTrait;
-  use ElPageResolverTrait;
+  use PageResolverTrait;
   use PreviousNodeTrait;
+  use ViewportTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function sessionDriver(): DriverInterface {
+    return $this->getSession()->getDriver();
+  }
+
+  /**
+   * ElFeatureContext constructor.
+   *
+   * @param string $pageMapFilePath
+   *   Pathname for the map config file.
+   */
+  public function __construct(string $pageMapFilePath) {
+    $this->loadPageMapping($pageMapFilePath);
+  }
 
   /**
    * Remove the previous node, if exists.
@@ -39,19 +58,9 @@ class ElRssContext extends RawDrupalContext {
   }
 
   /**
-   * @BeforeStep
-   */
-  public function beforeStep() {
-    $driver = $this->getSession()->getDriver();
-    if ($driver instanceof Selenium2Driver) {
-      $driver->resizeWindow(1920, 4000, 'current');
-    }
-  }
-
-  /**
    * @When I click Generate RSS URL submit button
    */
-  function iClickGenerateRssUrlSubmitButton() {
+  public function iClickGenerateRssUrlSubmitButton(): void {
     // *[@id="edit-submit"] XPath.
     $this->getSession()
       ->getPage()
@@ -63,8 +72,7 @@ class ElRssContext extends RawDrupalContext {
    * @Then I should not see the previously created node
    */
   public function iShouldNotSeeThePreviouslyCreatedNode(): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
+    $page = $this->getSession()->getPage();
 
     $title = $this->previousNode()->get('title')->value;
 
