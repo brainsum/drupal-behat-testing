@@ -3,6 +3,7 @@
 namespace Brainsum\DrupalBehatTesting\Helper;
 
 use Exception;
+use RuntimeException;
 use function debug_backtrace;
 use function sleep;
 
@@ -40,7 +41,7 @@ trait SpinTrait {
     }
     $backtrace = debug_backtrace();
 
-    throw new Exception(
+    throw new RuntimeException(
       'Timeout thrown by ' . $backtrace[1]['class'] . '::' . $backtrace[1]['function'] . "()\n" .
       $backtrace[1]['file'] . ', line ' . $backtrace[1]['line']
     );
