@@ -25,7 +25,7 @@ trait ViewportTrait {
    *
    * @BeforeStep
    */
-  public function beforeStep(): void {
+  public function setViewportBeforeStep(): void {
     if (
       ($driver = $this->sessionDriver())
       && $driver instanceof Selenium2Driver
