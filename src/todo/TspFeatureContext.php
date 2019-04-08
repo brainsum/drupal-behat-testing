@@ -18,6 +18,8 @@ use function sleep;
 class TspFeatureContext extends TietoContext {
 
   /**
+   * Then I edit a node under :parent corner with keyword :keyword.
+   *
    * @Then I edit a node under :parent corner with keyword :keyword
    */
   public function iEditANodeUnderParentWithKeyword($parent, $keyword): void {
@@ -56,7 +58,6 @@ class TspFeatureContext extends TietoContext {
       $inserted = $term->save();
       $term_id = $term->id();
     }
-
 
     $nodeValues = [
       'type' => 'page',
@@ -136,7 +137,7 @@ class TspFeatureContext extends TietoContext {
   /**
    * Types given value into an input field appearing on a modal window.
    *
-   * Example usage: I enter "A nice title" for ".article-title" on modal popup
+   * Example usage: I enter "A nice title" for ".article-title" on modal popup.
    *
    * @Then I enter :value for :field on modal popup
    */
@@ -149,7 +150,7 @@ class TspFeatureContext extends TietoContext {
       throw new RuntimeException("Element not found with the given CSS selector: $field");
     }
     $element->setValue($value);
-    // Assertion
+    // Assertion.
     $check = $element->getValue();
     if (!$check) {
       throw new RuntimeException("Value was not set in the input field with the given CSS selector: $field");
@@ -161,7 +162,7 @@ class TspFeatureContext extends TietoContext {
    * simulates that an item being selected from the autocomplete result list.
    *
    * Example usage: I enter "A nice title" for ".article-title" on modal popup
-   * and select from autocomplete
+   * and select from autocomplete.
    *
    * @Then I enter :value for :field on modal popup and select from
    *   autocomplete
@@ -183,7 +184,6 @@ class TspFeatureContext extends TietoContext {
     $this->getSession()->wait(1000, '(0 === jQuery.active)');
 
     // Now some JS-hack is necessary to be able to use the result list of autocomplete feature:
-
     // First, we imitate any search result appearing by copying over from the contrib module's code: renderItem() function in its js/autocomplete.js file:
     $driver->executeScript("
       \$ = jQuery;
@@ -197,7 +197,6 @@ class TspFeatureContext extends TietoContext {
     // Second, for this search result item we set a valid URL path existing in Drupal:
     $driver->executeScript("document.querySelector('#drupal-modal > ul > li:nth-child(1)').jQuery321055708775364045392 = {uiAutocompleteItem: {path: '/filter/tips'}};");
     // This supposed not to work, because jQuery uses a hash (eg. 321055708775364045392) in the property name, which changes on every page load.
-
     // Third, we make the parent element visible:
     $driver->executeScript("
       var obj = document.querySelector('#drupal-modal > ul');
@@ -550,7 +549,7 @@ class TspFeatureContext extends TietoContext {
 
       // Wait for ajax to finish.
       $this->getSession()->wait($time, '(0 === jQuery.active)');
-      # @todo Would be better not to rely on explicit waits. Find a better solution to avoid waiting.
+      // @todo Would be better not to rely on explicit waits. Find a better solution to avoid waiting.
       sleep(2);
     }
     $save_button = $page->find('css', '.ui-widget-content .ui-dialog-buttonset .form-submit');

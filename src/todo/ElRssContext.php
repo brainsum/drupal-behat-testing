@@ -134,7 +134,7 @@ class ElRssContext extends RawDrupalContext {
     $date_text = $this->previousNode()->get($field_selector)->value;
     $time_stamp = strtotime($date_text);
 
-    // $formatted_date = format_date($time_stamp, 'custom', 'D, d M Y H:i:s O');
+    // $formatted_date = format_date($time_stamp, 'custom', 'D, d M Y H:i:s O');.
     $dt = new DateTime();
     $dt->setTimestamp($time_stamp);
     $formatted_date = $dt->format('D, d M Y H:i:s');
