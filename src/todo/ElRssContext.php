@@ -2,6 +2,7 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\DriverInterface;
 use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
@@ -116,42 +117,51 @@ class ElRssContext extends RawDrupalContext {
     }
   }
 
-//  /**
-//   * @When /^(?:|I )fill in select2 input "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)" and select "(?P<entry>(?:[^"]|\\")*)"$/
-//   *
-//   * @todo: Refactor according to community context
-//   * @see: https://github.com/novaway/BehatCommonContext
-//   */
-//  public function iFillInSelectInputWithAndSelect($field, $value, $entry) {
-//    $page = $this->getSession()->getPage();
-//
-//    $inputField = $page->find('css', $field);
-//    if (!$inputField) {
-//      throw new \RuntimeException('No field found');
-//    }
-//
-//    $choice = $inputField->getParent()->find('css', '.select2-selection');
-//    if (!$choice) {
-//      throw new \RuntimeException('No select2 choice found');
-//    }
-//    $choice->press();
-//
-//    $select2Input = $page->find('css', '.select2-search__field');
-//    if (!$select2Input) {
-//      throw new \RuntimeException('No input found');
-//    }
-//    $select2Input->setValue($value);
-//
-//    $this->getSession()->wait(1000);
-//
-//    $chosenResults = $page->findAll('css', '.select2-results li');
-//    /** @var \Behat\Mink\Element\NodeElement $result */
-//    foreach ($chosenResults as $result) {
-//      if ($result->getText() === $entry) {
-//        $result->click();
-//        break;
-//      }
-//    }
-//  }
+  /**
+   * Then I should see the text :title and :date.
+   *
+   * @Then I should see the text :title and :date
+   */
+  public function iShouldSeeTheTextAnd($title, $date): void {
+    throw new PendingException();
+
+    $page = $this->getSession()->getPage();
+    switch ($date) {
+      case 'pubdate':
+        $field_selector = 'field_first_publish_date';
+        break;
+    }
+    $date_text = $this->previousNode()->get($field_selector)->value;
+    $time_stamp = strtotime($date_text);
+
+    // $formatted_date = format_date($time_stamp, 'custom', 'D, d M Y H:i:s O');
+    $dt = new DateTime();
+    $dt->setTimestamp($time_stamp);
+    $formatted_date = $dt->format('D, d M Y H:i:s');
+    $zone = new DateTime();
+    $zone->setTimezone(new DateTimeZone(drupal_get_user_timezone()));
+    $formatted_zone = $zone->format('O');
+    $formatted_date = $formatted_date . ' ' . $formatted_zone;
+    $date_text = '/<pubDate>' . str_replace('+', '\+', $formatted_date) . '<\/pubDate>/im';
+    $page_content = $page->getText();
+
+    $pattern_title = '/' . $title . '/im';
+    $pattern_date = $date_text;
+
+    $matched_title = FALSE;
+    $matched_date = FALSE;
+
+    preg_match_all($pattern_title, $page_content, $matched_title);
+    preg_match_all($pattern_date, $page_content, $matched_date);
+    $nodes = $page->findAll('xpath', '//html[text()="' . $title . '"]');
+
+    if (!$matched_title[0]) {
+      throw new Exception("Node with title ('$title') not found on rss feed!");
+    }
+
+    if (!$matched_date[0]) {
+      throw new Exception("Date ('$formatted_date') not found on rss feed!");
+    }
+  }
 
 }
