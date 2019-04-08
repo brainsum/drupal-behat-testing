@@ -297,11 +297,12 @@ class TietoContext extends GenericContext {
     $hourField->setValue($dateFormatter->format($time, 'custom', 'H:i'));
   }
 
-  // @todo: fix these:
-  // ------------------
-
   /**
+   * Given I click the :arg1 element.
+   *
    * @Given I click the :arg1 element
+   *
+   * @todo @fixme
    */
   public function iClickTheElement($selector): void {
     $page = $this->getSession()->getPage();
@@ -315,9 +316,13 @@ class TietoContext extends GenericContext {
   }
 
   /**
+   * Then I fill in wysiwyg on field :locator with :value.
+   *
    * @Then I fill in wysiwyg on field :locator with :value
    *
    * @see: https://gist.github.com/johnennewdeeson/240e2b60c23ea3217887
+   *
+   * @todo @fixme
    */
   public function iFillInWysiwygOnFieldWith($locator, $value): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -344,6 +349,8 @@ class TietoContext extends GenericContext {
    *
    * @todo: Refactor according to community context
    * @see: https://github.com/novaway/BehatCommonContext
+   *
+   * @todo @fixme
    */
   public function iFillInSelect2InputWithAndSelect($field, $value, $entry): void {
     $session = $this->getSession();
@@ -377,9 +384,13 @@ class TietoContext extends GenericContext {
   }
 
   /**
+   * Then I should see the scheduled date notice under the :action button.
+   *
    * @Then I should see the scheduled date notice under the :action button
+   *
+   * @todo @fixme
    */
-  public function iShouldSeeTheScheduledDateNotificationUnderTheButton($action): void {
+  public function iShouldSeeTheScheduledDateNotificationUnderTheButton(string $action): void {
     $action = strtolower($action);
     $session = $this->getSession();
     $page = $session->getPage();
