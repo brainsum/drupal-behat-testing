@@ -55,8 +55,8 @@ trait PageResolverTrait {
    *   The page path.
    */
   protected function resolvePageNameToPath(string $pageName): string {
-    if (isset($this->pageMapping()['path'])) {
-      return $this->pageMapping()['path'];
+    if (isset($this->pageMapping()[$pageName]['path'])) {
+      return $this->pageMapping()[$pageName]['path'];
     }
 
     throw new PendingException("Path for '$pageName' is not configured.");
