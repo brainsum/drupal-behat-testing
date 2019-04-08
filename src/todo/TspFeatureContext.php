@@ -2,7 +2,6 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
-use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
 use Drupal;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -17,18 +16,6 @@ use function sleep;
  * Defines application features from the specific context.
  */
 class TspFeatureContext extends TietoContext {
-
-  use PageResolverTrait;
-
-  /**
-   * ElFeatureContext constructor.
-   *
-   * @param string $pageMapFilePath
-   *   Pathname for the map config file.
-   */
-  public function __construct(string $pageMapFilePath) {
-    $this->loadPageMapping($pageMapFilePath);
-  }
 
   /**
    * @Then I edit a node under :parent corner with keyword :keyword
