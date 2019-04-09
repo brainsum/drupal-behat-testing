@@ -11,7 +11,6 @@ use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Behat\Behat\Hook\Scope\AfterStepScope;
 use RuntimeException;
 
 /**
@@ -44,6 +43,8 @@ class ElRssContext extends RawDrupalContext {
   }
 
   /**
+   * When I click Generate RSS URL submit button.
+   *
    * @When I click Generate RSS URL submit button
    */
   public function iClickGenerateRssUrlSubmitButton(): void {
@@ -53,8 +54,6 @@ class ElRssContext extends RawDrupalContext {
       ->find('css', '#views-exposed-form-news-rss-page > div > div > input[type="submit"]')
       ->click();
   }
-
-
 
   /**
    * Then the RSS date should be the :dateType date.
