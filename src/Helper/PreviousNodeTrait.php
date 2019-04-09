@@ -39,35 +39,6 @@ trait PreviousNodeTrait {
   }
 
   /**
-   * Set the previous node.
-   *
-   * @param int $nodeId
-   *   The node id.
-   */
-  public function setPreviousNode(int $nodeId): void {
-    $state = Drupal::state();
-    $state->set('behat_testing.previous_node_id', $nodeId);
-
-    $node = NULL;
-
-    try {
-      /** @var \Drupal\node\NodeInterface $node */
-      $node = Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->load($nodeId);
-    }
-    catch (Exception $exception) {
-      // Pass.
-    }
-
-    if ($node === NULL) {
-      throw new RuntimeException('Previous node could not be loaded.');
-    }
-
-    $this->previousNode = $node;
-  }
-
-  /**
    * Return the previous node.
    *
    * @return \Drupal\node\NodeInterface
@@ -106,6 +77,35 @@ trait PreviousNodeTrait {
 
     $this->previousNode = $node;
     return $this->previousNode;
+  }
+
+  /**
+   * Set the previous node.
+   *
+   * @param int $nodeId
+   *   The node id.
+   */
+  public function setPreviousNode(int $nodeId): void {
+    $state = Drupal::state();
+    $state->set('behat_testing.previous_node_id', $nodeId);
+
+    $node = NULL;
+
+    try {
+      /** @var \Drupal\node\NodeInterface $node */
+      $node = Drupal::entityTypeManager()
+        ->getStorage('node')
+        ->load($nodeId);
+    }
+    catch (Exception $exception) {
+      // Pass.
+    }
+
+    if ($node === NULL) {
+      throw new RuntimeException('Previous node could not be loaded.');
+    }
+
+    $this->previousNode = $node;
   }
 
   /**

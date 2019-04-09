@@ -5,12 +5,12 @@ namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use RuntimeException;
 use ZipArchive;
-use function strtolower;
-use function sleep;
-use function tempnam;
-use function basename;
 use function base64_encode;
+use function basename;
 use function file_get_contents;
+use function sleep;
+use function strtolower;
+use function tempnam;
 use function unlink;
 
 /**

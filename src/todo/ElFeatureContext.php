@@ -19,7 +19,8 @@ class ElFeatureContext extends TietoContext {
   /**
    * Node creation.
    *
-   * @Given I create a node with title :title of type :type and save it as :status
+   * @Given I create a node with title :title of type :type and save it as
+   *   :status
    */
   public function iCreateANodeWithTitleOftypeAndSaveItAs($title, $type, $status): void {
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */

@@ -32,20 +32,6 @@ trait PageResolverTrait {
   }
 
   /**
-   * Returns the page mapping.
-   *
-   * @return array
-   *   The page mapping.
-   */
-  protected function pageMapping(): array {
-    if (empty($this->pageMapping)) {
-      return [];
-    }
-
-    return $this->pageMapping;
-  }
-
-  /**
    * Resolve a page.
    *
    * @param string $pageName
@@ -60,6 +46,20 @@ trait PageResolverTrait {
     }
 
     throw new PendingException("Path for '$pageName' is not configured.");
+  }
+
+  /**
+   * Returns the page mapping.
+   *
+   * @return array
+   *   The page mapping.
+   */
+  protected function pageMapping(): array {
+    if (empty($this->pageMapping)) {
+      return [];
+    }
+
+    return $this->pageMapping;
   }
 
 }
