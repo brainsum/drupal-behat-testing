@@ -26,13 +26,6 @@ class ElRssContext extends RawDrupalContext {
   use ViewportTrait;
 
   /**
-   * {@inheritdoc}
-   */
-  protected function sessionDriver(): DriverInterface {
-    return $this->getSession()->getDriver();
-  }
-
-  /**
    * ElFeatureContext constructor.
    *
    * @param string $pageMapFilePath
@@ -66,22 +59,26 @@ class ElRssContext extends RawDrupalContext {
 
     switch ($dateType) {
       case 'First publish':
-        $stamp = strtotime($this->previousNode()->get('field_first_publish_date')->value);
+        $stamp = strtotime($this->previousNode()
+          ->get('field_first_publish_date')->value);
         $date = $dateFormatter->format($stamp, 'custom', 'd M Y/H:i');
         break;
 
       case 'Authored on':
         // @todo: This should be "changed"?
-        $date = DrupalDateTime::createFromTimestamp((int) $this->previousNode()->getCreatedTime())
+        $date = DrupalDateTime::createFromTimestamp((int) $this->previousNode()
+          ->getCreatedTime())
           ->format('d M Y/H:i');
         break;
 
       default:
-        $date = DrupalDateTime::createFromTimestamp((int) $this->previousNode()->getCreatedTime())
+        $date = DrupalDateTime::createFromTimestamp((int) $this->previousNode()
+          ->getCreatedTime())
           ->format('d M Y/H:i');
     }
 
-    $rssDate = $dateFormatter->format(strtotime($this->previousNode()->get('field_rss_date')->value), 'custom', 'd M Y/H:i');
+    $rssDate = $dateFormatter->format(strtotime($this->previousNode()
+      ->get('field_rss_date')->value), 'custom', 'd M Y/H:i');
 
     if ($rssDate !== $date) {
       throw new RuntimeException("The date: ('$date') of type ('$dateType') is not equal to rss date: ('$rssDate') with title ('{$this->previousNode()->getTitle()}')");
@@ -133,6 +130,13 @@ class ElRssContext extends RawDrupalContext {
     if (!$matched_date[0]) {
       throw new Exception("Date ('$formatted_date') not found on rss feed!");
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function sessionDriver(): DriverInterface {
+    return $this->getSession()->getDriver();
   }
 
 }

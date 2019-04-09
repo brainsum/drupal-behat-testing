@@ -190,49 +190,6 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Return selector for field.
-   *
-   * @param string $fieldName
-   *   The field name.
-   *
-   * @return string
-   *   The selector.
-   *
-   * @throws \RuntimeException
-   */
-  protected function selectorForField(string $fieldName): string {
-    switch ($fieldName) {
-      case 'scheduled publish date':
-        return '#edit-scheduled-publish-date-wrapper .form-item-scheduled-publish-date-form-inline-entity-form-update-timestamp-0-value-';
-
-      case 'scheduled unpublish date':
-        return '#edit-scheduled-unpublish-date-wrapper .form-item-scheduled-unpublish-date-form-inline-entity-form-update-timestamp-0-value-';
-
-      case 'scheduled trash date':
-        return '#edit-scheduled-trash-date-wrapper .form-item-scheduled-trash-date-form-inline-entity-form-update-timestamp-0-value-';
-    }
-
-    throw new RuntimeException("Selector for field '$fieldName' was not found.");
-  }
-
-  /**
-   * Offsets a timestamp.
-   *
-   * @param int $timestamp
-   *   The timestamp.
-   * @param string $offset
-   *   The offset string, e.g "+1 month".
-   *
-   * @return int
-   *   The timestamp with the offset added.
-   */
-  public function offsetTimestamp(int $timestamp, string $offset): int {
-    return DrupalDateTime::createFromTimestamp($timestamp)
-      ->add(DateInterval::createFromDateString($offset))
-      ->getTimestamp();
-  }
-
-  /**
    * Then I set a :field to plus one day.
    *
    * @Then I set a :field to plus one day
@@ -259,6 +216,49 @@ class TietoContext extends GenericContext {
     $hourField->setValue($dateFormatter->format($time, 'custom', 'H:i'));
 
     $this->tietoDate = $dateFormatter->format($time, 'custom', 'd M Y - G:i T');
+  }
+
+  /**
+   * Offsets a timestamp.
+   *
+   * @param int $timestamp
+   *   The timestamp.
+   * @param string $offset
+   *   The offset string, e.g "+1 month".
+   *
+   * @return int
+   *   The timestamp with the offset added.
+   */
+  public function offsetTimestamp(int $timestamp, string $offset): int {
+    return DrupalDateTime::createFromTimestamp($timestamp)
+      ->add(DateInterval::createFromDateString($offset))
+      ->getTimestamp();
+  }
+
+  /**
+   * Return selector for field.
+   *
+   * @param string $fieldName
+   *   The field name.
+   *
+   * @return string
+   *   The selector.
+   *
+   * @throws \RuntimeException
+   */
+  protected function selectorForField(string $fieldName): string {
+    switch ($fieldName) {
+      case 'scheduled publish date':
+        return '#edit-scheduled-publish-date-wrapper .form-item-scheduled-publish-date-form-inline-entity-form-update-timestamp-0-value-';
+
+      case 'scheduled unpublish date':
+        return '#edit-scheduled-unpublish-date-wrapper .form-item-scheduled-unpublish-date-form-inline-entity-form-update-timestamp-0-value-';
+
+      case 'scheduled trash date':
+        return '#edit-scheduled-trash-date-wrapper .form-item-scheduled-trash-date-form-inline-entity-form-update-timestamp-0-value-';
+    }
+
+    throw new RuntimeException("Selector for field '$fieldName' was not found.");
   }
 
   /**

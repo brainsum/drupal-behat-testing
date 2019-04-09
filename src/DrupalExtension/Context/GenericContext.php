@@ -31,13 +31,6 @@ class GenericContext extends RawDrupalContext {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  protected function sessionDriver(): DriverInterface {
-    return $this->getSession()->getDriver();
-  }
-
-  /**
    * Then I visit the :pageName page.
    *
    * This includes an action of visiting the page.
@@ -76,6 +69,13 @@ class GenericContext extends RawDrupalContext {
    */
   public function iWaitForThePageToBeLoaded(): void {
     $this->getSession()->wait(20000, "document.readyState === 'complete'");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function sessionDriver(): DriverInterface {
+    return $this->getSession()->getDriver();
   }
 
 }
