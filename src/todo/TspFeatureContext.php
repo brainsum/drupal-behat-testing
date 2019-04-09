@@ -135,37 +135,15 @@ class TspFeatureContext extends TietoContext {
   }
 
   /**
-   * Types given value into an input field appearing on a modal window.
+   * Enter value into an input and select it from the autocomplete dropdown.
    *
-   * Example usage: I enter "A nice title" for ".article-title" on modal popup.
-   *
-   * @Then I enter :value for :field on modal popup
-   */
-  public function iEnterValueForFieldOnModalPopup($value, $field): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-
-    $element = $page->find('css', 'input[name="' . $field . '"]');
-    if (!isset($element)) {
-      throw new RuntimeException("Element not found with the given CSS selector: $field");
-    }
-    $element->setValue($value);
-    // Assertion.
-    $check = $element->getValue();
-    if (!$check) {
-      throw new RuntimeException("Value was not set in the input field with the given CSS selector: $field");
-    }
-  }
-
-  /**
    * Types given value into an input field appearing on a modal window and
    * simulates that an item being selected from the autocomplete result list.
    *
    * Example usage: I enter "A nice title" for ".article-title" on modal popup
    * and select from autocomplete.
    *
-   * @Then I enter :value for :field on modal popup and select from
-   *   autocomplete
+   * @Then I enter :value for :field on modal popup and select from autocomplete
    */
   public function iEnterValueForFieldOnModalPopupAndSelectFromAutocomplete($value, $field): void {
     $session = $this->getSession();
@@ -183,8 +161,11 @@ class TspFeatureContext extends TietoContext {
     // Wait for ajax to finish.
     $this->getSession()->wait(1000, '(0 === jQuery.active)');
 
-    // Now some JS-hack is necessary to be able to use the result list of autocomplete feature:
-    // First, we imitate any search result appearing by copying over from the contrib module's code: renderItem() function in its js/autocomplete.js file:
+    // Now some JS-hack is necessary to be able to use
+    // the result list of autocomplete feature:
+    // First, we imitate any search result appearing by copying over from
+    // the contrib module's code:
+    // renderItem() function in its js/autocomplete.js file:
     $driver->executeScript("
       \$ = jQuery;
       var \$line = \$('<li>').addClass('linkit-result');
@@ -194,9 +175,12 @@ class TspFeatureContext extends TietoContext {
       \$line.appendTo(document.querySelector('#drupal-modal > ul'));
     ");
 
-    // Second, for this search result item we set a valid URL path existing in Drupal:
+    // Second, for this search result item
+    // we set a valid URL path existing in Drupal:
     $driver->executeScript("document.querySelector('#drupal-modal > ul > li:nth-child(1)').jQuery321055708775364045392 = {uiAutocompleteItem: {path: '/filter/tips'}};");
-    // This supposed not to work, because jQuery uses a hash (eg. 321055708775364045392) in the property name, which changes on every page load.
+    // This supposed not to work, because jQuery uses a hash
+    // (eg. 321055708775364045392) in the property name,
+    // which changes on every page load.
     // Third, we make the parent element visible:
     $driver->executeScript("
       var obj = document.querySelector('#drupal-modal > ul');
@@ -204,8 +188,9 @@ class TspFeatureContext extends TietoContext {
       attr = obj.getAttribute('style').replace(/display: none;/gi, 'display: block;');
       obj.setAttribute('style', attr);
     ");
-    // It's simpler and does the same: $driver->executeScript("document.querySelector('#drupal-modal > ul').style.display = 'block';");
-    // Hint from here: https://stackoverflow.com/questions/23050885/how-to-change-the-style-of-an-element-using-selenium
+    // It's simpler and does the same:
+    // @todo: $driver->executeScript("document.querySelector('#drupal-modal > ul').style.display = 'block';");
+    // @see: https://stackoverflow.com/questions/23050885/how-to-change-the-style-of-an-element-using-selenium
   }
 
   /**
@@ -217,6 +202,8 @@ class TspFeatureContext extends TietoContext {
    * should be Heading 1" in content area.
    *
    * @Then I press the :type button and add the text :text in content area
+   *
+   * @todo: Refactor.
    */
   public function iPressTheButtonAndAddTheTextInContentArea($type, $text): void {
     $session = $this->getSession();
@@ -480,40 +467,42 @@ class TspFeatureContext extends TietoContext {
    *
    * Example usage: Then I open the "image" upload form and fill it in.
    *
-   * @Then I open the :image upload form and fill it in
+   * @Then I open the :imageFieldName upload form and fill it in
    */
-  public function iOpenTheUploadFormAndFillItIn($image): void {
+  public function iOpenTheUploadFormAndFillItIn($imageFieldName): void {
+    // @todo: Make configurable.
+    $imagePath = '/var/www/html/tests/behat/features/images/tieto-office-building.jpg';
     $time = 5000;
     $session = $this->getSession();
     $page = $session->getPage();
-    switch ($image) {
+    switch ($imageFieldName) {
       case 'image':
-        $test_selector = '.cke_widget_image';
+        $testSelector = '.cke_widget_image';
         $button = '.cke_button__drupalimage';
         $form = [
           [
             'upload_field' => 'input[name="files[fid]"]',
             'alt_field' => 'input[name="attributes[alt]"]',
-            'image_url' => '/var/www/html/tests/behat/features/images/tieto-office-building.jpg',
+            'image_url' => $imagePath,
             'alt_text' => 'Test alt field',
           ],
         ];
         break;
 
       case 'double image':
-        $test_selector = '.sbs-full-image';
+        $testSelector = '.sbs-full-image';
         $button = '.cke_button__doubleimage';
         $form = [
           [
             'upload_field' => 'input[name="files[fid_left]"]',
             'alt_text' => 'Test alt left',
-            'image_url' => '/var/www/html/tests/behat/features/images/tieto-office-building.jpg',
+            'image_url' => $imagePath,
             'alt_field' => 'input[name="attributes_left[alt]"]',
           ],
           [
             'upload_field' => 'input[name="files[fid_right]"]',
             'alt_text' => 'Test alt right',
-            'image_url' => '/var/www/html/tests/behat/features/images/tieto-office-building.jpg',
+            'image_url' => $imagePath,
             'alt_field' => 'input[name="attributes_right[alt]"]',
           ],
         ];
@@ -562,7 +551,7 @@ class TspFeatureContext extends TietoContext {
     $session->switchToIFrame('test-cke-iframe');
     $session = $this->getSession();
     $page = $session->getPage();
-    $test = $page->find('css', $test_selector);
+    $test = $page->find('css', $testSelector);
 
     if (!$test) {
       throw new RuntimeException('Image did not add correctly');
