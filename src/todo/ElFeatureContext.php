@@ -2,18 +2,22 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
+use Behat\Mink\Driver\DriverInterface;
 use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
+use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\DrupalExtension\Context\RawDrupalContext;
 use RuntimeException;
 use function reset;
 
 /**
  * Defines application features from the specific context.
  */
-class ElFeatureContext extends TietoContext {
+class ElFeatureContext extends RawDrupalContext {
 
+  use ViewportTrait;
   use PreviousNodeTrait;
 
   /**
@@ -120,6 +124,13 @@ class ElFeatureContext extends TietoContext {
     else {
       throw new RuntimeException('Node creation failed!');
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function sessionDriver(): DriverInterface {
+    return $this->getSession()->getDriver();
   }
 
 }

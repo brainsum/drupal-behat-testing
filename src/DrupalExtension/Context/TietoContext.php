@@ -58,9 +58,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * When I click on the ":itemName" menu item.
+   * When I click on the :itemName menu item.
    *
-   * @When I click on the ":itemName" menu item
+   * @When I click on the :itemName menu item
    */
   public function iClickOnTheMenuItem(string $itemName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -88,9 +88,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * When I hover over the ":tabName" navigation tab.
+   * When I hover over the :tabName navigation tab.
    *
-   * @When I hover over the ":tabName" navigation tab
+   * @When I hover over the :tabName navigation tab
    */
   public function iHoverOverTheNavigationTab(string $tabName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -106,9 +106,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Then I should see the ":tabName" navigation tab.
+   * Then I should see the :tabName navigation tab.
    *
-   * @Then I should see the ":tabName" navigation tab
+   * @Then I should see the :tabName navigation tab
    */
   public function iShouldSeeTheNavigationTab(string $tabName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -127,9 +127,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Then I should not see the ":tabName" navigation tab.
+   * Then I should not see the :tabName navigation tab.
    *
-   * @Then I should not see the ":tabName" navigation tab
+   * @Then I should not see the :tabName navigation tab
    */
   public function iShouldNotSeeTheNameNavigationTab(string $tabName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -148,9 +148,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Then I should see the ":itemName" menu item.
+   * Then I should see the :itemName menu item.
    *
-   * @Then I should see the ":itemName" menu item
+   * @Then I should see the :itemName menu item
    */
   public function iShouldSeeTheMenuItem(string $itemName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -169,9 +169,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Then I should not see the ":itemName" menu item.
+   * Then I should not see the :itemName menu item.
    *
-   * @Then I should not see the ":itemName" menu item
+   * @Then I should not see the :itemName menu item
    */
   public function iShouldNotSeeTheMenuItem(string $itemName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
@@ -343,9 +343,9 @@ class TietoContext extends GenericContext {
   }
 
   /**
-   * Then I fill in select2 input ":field" with ":value" and select ":entry".
+   * Then I fill in select2 input :field with :value and select :entry.
    *
-   * @Then I fill in select2 input ":field" with ":value" and select ":entry"
+   * @Then I fill in select2 input :field with :value and select :entry
    *
    * @todo: Refactor according to community context
    * @see: https://github.com/novaway/BehatCommonContext
