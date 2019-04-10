@@ -4,6 +4,7 @@ namespace Brainsum\DrupalBehatTesting\Helper;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\Yaml\Parser;
+use function file_get_contents;
 
 /**
  * Trait PageResolverTrait.
@@ -28,7 +29,7 @@ trait PageResolverTrait {
    *   File path.
    */
   protected function loadPageMapping(string $filePath): void {
-    $this->pageMapping = (new Parser())->parse($filePath);
+    $this->pageMapping = (new Parser())->parse(file_get_contents($filePath));
   }
 
   /**

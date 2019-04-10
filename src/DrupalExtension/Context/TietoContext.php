@@ -117,7 +117,7 @@ class TietoContext extends GenericContext {
       ->getPage()
       ->find('css', $selector);
 
-    if (!$element) {
+    if ($element === NULL) {
       Assert::fail("The '$tabName' navigation tab was not found.");
     }
 
@@ -138,7 +138,7 @@ class TietoContext extends GenericContext {
       ->getPage()
       ->find('css', $selector);
 
-    if (!$element) {
+    if ($element === NULL) {
       Assert::fail("The '$tabName' navigation tab was not found.");
     }
 
@@ -154,12 +154,12 @@ class TietoContext extends GenericContext {
    */
   public function iShouldSeeTheMenuItem(string $itemName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
-    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > ul > li > :contains('" . $itemName . "')";
+    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > ul > li > :contains('$itemName')";
     $element = $this->getSession()
       ->getPage()
       ->find('css', $selector);
 
-    if (!$element) {
+    if ($element === NULL) {
       Assert::fail("The '$itemName' navigation tab was not found.");
     }
 
@@ -175,12 +175,12 @@ class TietoContext extends GenericContext {
    */
   public function iShouldNotSeeTheMenuItem(string $itemName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
-    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > ul > li > :contains('" . $itemName . "')";
+    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > ul > li > :contains('$itemName')";
     $element = $this->getSession()
       ->getPage()
       ->find('css', $selector);
 
-    if (!$element) {
+    if ($element === NULL) {
       Assert::fail("The '$itemName' navigation tab was not found.");
     }
 
@@ -196,26 +196,22 @@ class TietoContext extends GenericContext {
    */
   public function iSetFieldToPlusOneDay(string $field): void {
     $now = Drupal::time()->getCurrentTime();
+
     $dateTime = DrupalDateTime::createFromTimestamp(
       $this->offsetTimestamp($now, '+1 day'),
       drupal_get_user_timezone()
     );
 
-    $time = $dateTime->getTimestamp();
-
-    /** @var \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter */
-    $dateFormatter = Drupal::service('date.formatter');
-
     $fieldSelector = $this->selectorForField($field);
     $page = $this->getSession()->getPage();
 
     $dateField = $page->find('css', $fieldSelector . 'date input');
-    $dateField->setValue($dateFormatter->format($time, 'custom', 'd M Y'));
+    $dateField->setValue($dateTime->format('d M Y'));
 
     $hourField = $page->find('css', $fieldSelector . 'time input');
-    $hourField->setValue($dateFormatter->format($time, 'custom', 'H:i'));
+    $hourField->setValue($dateTime->format('H:i'));
 
-    $this->tietoDate = $dateFormatter->format($time, 'custom', 'd M Y - G:i T');
+    $this->tietoDate = $dateTime->format('d M Y - G:i T');
   }
 
   /**
@@ -420,8 +416,9 @@ class TietoContext extends GenericContext {
     }
     $text = $text_wrapper->getText();
     $search_text = 'Scheduled ' . $action . ' date: ' . $this->tietoDate;
+
     if ($text !== $search_text) {
-      throw new RuntimeException("Date not found or incorrect under the '{$action}' button date: '{$this->tietoDate}'");
+      throw new RuntimeException("Date not found or incorrect under the '{$action}' button date: '{$this->tietoDate}' (Expected: {$search_text})");
     }
   }
 
