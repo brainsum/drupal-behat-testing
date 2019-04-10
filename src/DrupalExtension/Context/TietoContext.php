@@ -66,7 +66,7 @@ class TietoContext extends GenericContext {
     /** @var \Behat\Mink\Element\NodeElement $element */
     $element = $this->getSession()
       ->getPage()
-      ->find('css', '#block-tieto-admin-user-menu > ul > li.menu-item.menu-item--expanded > ul > li > a:contains("' . $itemName . '")');
+      ->find('css', "#block-tieto-admin-user-menu > ul > li.menu-item.menu-item--expanded > ul > li > a:contains('$itemName')");
     $element->click();
   }
 
@@ -96,7 +96,7 @@ class TietoContext extends GenericContext {
     /** @var \Behat\Mink\Element\NodeElement $element */
     $element = $this->getSession()
       ->getPage()
-      ->find('css', ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('" . $tabName . "')");
+      ->find('css', ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('$tabName')");
 
     if (NULL === $element) {
       throw new RuntimeException("The '$tabName' navigation tab was not found.");
@@ -112,7 +112,7 @@ class TietoContext extends GenericContext {
    */
   public function iShouldSeeTheNavigationTab(string $tabName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
-    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('" . $tabName . "')";
+    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('$tabName')";
     $element = $this->getSession()
       ->getPage()
       ->find('css', $selector);
@@ -133,7 +133,7 @@ class TietoContext extends GenericContext {
    */
   public function iShouldNotSeeTheNameNavigationTab(string $tabName): void {
     /** @var \Behat\Mink\Element\NodeElement $element */
-    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('" . $tabName . "')";
+    $selector = ".region-header nav > ul > li.menu-item.menu-item--expanded > :contains('$tabName')";
     $element = $this->getSession()
       ->getPage()
       ->find('css', $selector);
@@ -325,13 +325,13 @@ class TietoContext extends GenericContext {
     $element = $this->getSession()->getPage()->findField($locator);
 
     if (NULL === $element) {
-      throw new RuntimeException('Could not find WYSIWYG with locator: ' . $locator, $this->getSession());
+      throw new RuntimeException("Could not find WYSIWYG with locator: $locator", $this->getSession());
     }
 
     $fieldId = $element->getAttribute('id');
 
     if (empty($fieldId)) {
-      throw new RuntimeException('Could not find an id for field with locator: ' . $locator);
+      throw new RuntimeException("Could not find an ID for field with locator: $locator");
     }
 
     $this->getSession()
@@ -393,32 +393,32 @@ class TietoContext extends GenericContext {
 
     switch ($action) {
       case 'archive':
-        $parent_class = 'trash';
+        $parentClass = 'trash';
         break;
 
       case 'publish':
-        $parent_class = 'unpublished';
+        $parentClass = 'unpublished';
         break;
 
       case 'unpublish':
-        $parent_class = 'unpublished-content';
+        $parentClass = 'unpublished-content';
         break;
 
       default:
-        $parent_class = FALSE;
+        $parentClass = FALSE;
     }
 
-    $parent_selector = '.form-action-moderation-state-' . $parent_class . '-button-wrapper';
-    $selector = $parent_selector . ' .moderation-state-' . $parent_class . '-action-description';
-    $text_wrapper = $page->find('css', $selector);
-    if (!$text_wrapper) {
+    $parentSelector = ".form-action-moderation-state-{$parentClass}-button-wrapper";
+    $selector = "$parentSelector .moderation-state-{$parentClass}-action-description";
+    $textWrapper = $page->find('css', $selector);
+    if (!$textWrapper) {
       throw new RuntimeException("The scheduled dates wrapper was not found under button ('$action')");
     }
-    $text = $text_wrapper->getText();
-    $search_text = 'Scheduled ' . $action . ' date: ' . $this->tietoDate;
+    $text = $textWrapper->getText();
+    $searchText = "Scheduled {$action} date: {$this->tietoDate}";
 
-    if ($text !== $search_text) {
-      throw new RuntimeException("Date not found or incorrect under the '{$action}' button date: '{$this->tietoDate}' (Expected: {$search_text})");
+    if ($text !== $searchText) {
+      throw new RuntimeException("Date not found or incorrect under the '{$action}' button date: '{$this->tietoDate}' (Expected: {$searchText})");
     }
   }
 
