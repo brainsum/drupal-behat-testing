@@ -2,11 +2,12 @@
 
 namespace Brainsum\DrupalBehatTesting\Helper;
 
-use Behat\Behat\Hook\Scope\AfterStepScope;
 use Drupal;
+use Drupal\Component\Utility\Crypt;
 use Drupal\node\NodeInterface;
-use Exception;
+use Drupal\node\NodeStorageInterface;
 use RuntimeException;
+use function array_merge;
 
 /**
  * Class PreviousNodeTrait.
@@ -15,96 +16,139 @@ use RuntimeException;
  */
 trait PreviousNodeTrait {
 
+  // @todo: Maybe don't force this relation.
+  use DrupalUserTrait;
+
   /**
-   * The previous node.
+   * The Drupal node storage.
+   *
+   * @var \Drupal\node\NodeStorageInterface
+   */
+  protected $nodeStorage;
+
+  /**
+   * The node.
    *
    * @var \Drupal\node\NodeInterface
    */
   protected $previousNode;
 
   /**
-   * Remove the previous node, if exists.
+   * Returns the node storage.
    *
-   * @AfterStep
+   * @return \Drupal\node\NodeStorageInterface
+   *   The node storage.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function previousNodeCleanup(AfterStepScope $scope): void {
-    if (
-      $this->previousNode() !== NULL
-      && $scope->getTestResult()->getResultCode() === 99
-    ) {
-      $this->previousNode()->delete();
-      echo "Cleanup executed after failed step, deleted node: {$this->previousNode()->id()}";
+  protected function nodeStorage(): NodeStorageInterface {
+    if ($this->nodeStorage === NULL) {
+      $this->nodeStorage = Drupal::entityTypeManager()->getStorage('node');
     }
+
+    return $this->nodeStorage;
+  }
+
+  /**
+   * Set the previous node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node.
+   */
+  protected function setPreviousNode(NodeInterface $node): void {
+    $this->previousNode = $node;
   }
 
   /**
    * Return the previous node.
    *
    * @return \Drupal\node\NodeInterface
-   *   The node, or NULL.
+   *   The previous node.
+   *
+   * @note: Assumes $this->previousNode was not unset manually.
    */
-  public function previousNode(): NodeInterface {
-    $state = Drupal::state();
-    $nodeId = $state->get('behat_testing.previous_node_id');
-
-    if ($nodeId === NULL) {
-      throw new RuntimeException('ID for previous node was not found.');
-    }
-
-    if (
-      isset($this->previousNode)
-      && $this->previousNode->id() === $nodeId
-    ) {
-      return $this->previousNode;
-    }
-
-    $node = NULL;
-
-    try {
-      /** @var \Drupal\node\NodeInterface $node */
-      $node = Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->load($nodeId);
-    }
-    catch (Exception $exception) {
-      // Pass.
-    }
-
-    if ($node === NULL) {
-      throw new RuntimeException('Previous node could not be loaded.');
-    }
-
-    $this->previousNode = $node;
+  protected function previousNode(): NodeInterface {
     return $this->previousNode;
   }
 
   /**
-   * Set the previous node.
+   * Generate a basic node with the additionally supplied values and save it.
    *
-   * @param int $nodeId
-   *   The node id.
+   * @param string $bundle
+   *   The bundle machine name.
+   * @param array $additionalValues
+   *   (Optional) additional field/value pairs.
+   *
+   * @return \Drupal\node\NodeInterface
+   *   The created node.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Exception
    */
-  public function setPreviousNode(int $nodeId): void {
-    $state = Drupal::state();
-    $state->set('behat_testing.previous_node_id', $nodeId);
+  protected function generateNode(string $bundle, array $additionalValues = []): NodeInterface {
+    $values = [
+      'type' => $bundle,
+      'uid' => $this->loadCurrentDrupalUser()->id(),
+      'title' => 'Behat testing | ' . bin2hex(Crypt::randomBytes(10)),
+      'body' => bin2hex(Crypt::randomBytes(10)),
+    ];
 
-    $node = NULL;
+    $values = array_merge($values, $additionalValues);
 
-    try {
-      /** @var \Drupal\node\NodeInterface $node */
-      $node = Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->load($nodeId);
+    /** @var \Drupal\node\NodeInterface $newNode */
+    $newNode = $this->nodeStorage()->create($values);
+    $newNode->save();
+    return $newNode;
+  }
+
+  /**
+   * Checks if the previousNode was deleted or not.
+   *
+   * @return bool
+   *   TRUE, if it was deleted, FALSE otherwise.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
+   * @todo: Make this more bulletproof.
+   */
+  protected function previousNodeWasDeleted(): bool {
+    $nid = $this->previousNode()->id();
+    $loaded = $this->nodeStorage()->load($nid);
+    return $loaded === NULL;
+  }
+
+  /**
+   * Reload the previous node from the database.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function reloadPreviousNode(): void {
+    $nid = $this->previousNode()->id();
+    /** @var \Drupal\node\NodeInterface $loaded */
+    $loaded = $this->nodeStorage()->load($nid);
+
+    if ($loaded === NULL) {
+      throw new RuntimeException("The node ({$nid}) could not be reloaded.");
     }
-    catch (Exception $exception) {
-      // Pass.
-    }
 
-    if ($node === NULL) {
-      throw new RuntimeException('Previous node could not be loaded.');
-    }
+    $this->setPreviousNode($loaded);
+  }
 
-    $this->previousNode = $node;
+  /**
+   * Cleans up the previous node.
+   *
+   * @AfterScenario
+   */
+  public function cleanupPreviousNode(): void {
+    if ($this->previousNode !== NULL) {
+      $this->previousNode->delete();
+      $this->previousNode = NULL;
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Debug;
 
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
