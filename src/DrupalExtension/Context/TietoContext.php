@@ -262,7 +262,7 @@ class TietoContext extends GenericContext {
    *
    * @Then I set the Authored date to the past
    *
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public function iSetAuthoredOnFieldToMinusOneDay(): void {
     $page = $this->getSession()->getPage();
