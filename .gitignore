@@ -1,6 +1,8 @@
 tmp/
 /phpcs.xml
 
+/composer.lock
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Drupal template
 # Ignore configuration files that may contain sensitive information.
