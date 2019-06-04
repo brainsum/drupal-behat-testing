@@ -206,12 +206,12 @@ class TietoContext extends GenericContext {
     $page = $this->getSession()->getPage();
 
     $dateField = $page->find('css', $fieldSelector . 'date input');
-    $dateField->setValue($dateTime->format('d M Y'));
+    $dateField->setValue($dateTime->format('j M Y'));
 
     $hourField = $page->find('css', $fieldSelector . 'time input');
     $hourField->setValue($dateTime->format('H:i'));
 
-    $this->tietoDate = $dateTime->format('d M Y - G:i T');
+    $this->tietoDate = $dateTime->format('j M Y - G:i T');
   }
 
   /**
@@ -287,7 +287,7 @@ class TietoContext extends GenericContext {
     $dateFormatter = Drupal::service('date.formatter');
 
     $dateField = $page->find('css', '.form-item-created-0-value-date input');
-    $dateField->setValue($dateFormatter->format($time, 'custom', 'd M Y'));
+    $dateField->setValue($dateFormatter->format($time, 'custom', 'j M Y'));
 
     $hourField = $page->find('css', '.form-item-created-0-value-time input');
     $hourField->setValue($dateFormatter->format($time, 'custom', 'H:i'));
