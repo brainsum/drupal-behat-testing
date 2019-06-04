@@ -10,6 +10,10 @@ use RuntimeException;
 
 /**
  * Trait ScheduledUpdateTrait.
+ *
+ * @package Brainsum\DrupalBehatTesting\Helper
+ *
+ * @todo: Move storage/access code into a service so state can be shared between classes.
  */
 trait ScheduledUpdateTrait {
 

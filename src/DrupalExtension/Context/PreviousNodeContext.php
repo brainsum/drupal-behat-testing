@@ -10,7 +10,9 @@ use function count;
 /**
  * Class PreviousNodeContext.
  *
- * @package Brainsum\DrupalBehatTesting\DrupalExtension\Context
+ * phpcs:disable
+ * @deprecated
+ * phpcs:enable
  */
 class PreviousNodeContext extends RawDrupalContext {
 
