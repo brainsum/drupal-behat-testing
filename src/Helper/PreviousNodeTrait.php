@@ -107,6 +107,30 @@ trait PreviousNodeTrait {
   }
 
   /**
+   * Generate an project-specific node.
+   *
+   * Might be used to abstract project-specific node generations to avoid code
+   * duplication.
+   *
+   * @param string $bundle
+   *   Human-readable content type/bundle.
+   * @param string $moderationState
+   *   Human-readable moderation state.
+   * @param array $additionalValues
+   *   (Optional) additional field/value pairs.
+   *
+   * @return \Drupal\node\NodeInterface
+   *   The saved node.
+   *
+   * @throws \Exception
+   */
+  abstract protected function generateProjectNode(
+    string $bundle,
+    string $moderationState,
+    array $additionalValues = []
+  ): NodeInterface;
+
+  /**
    * Checks if the previousNode was deleted or not.
    *
    * @return bool
