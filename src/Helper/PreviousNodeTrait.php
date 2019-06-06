@@ -131,6 +131,19 @@ trait PreviousNodeTrait {
   ): NodeInterface;
 
   /**
+   * Returns the machine name for a node type.
+   *
+   * @param string $type
+   *   The human-readable node type.
+   *
+   * @return string
+   *   The machine name.
+   *
+   * @throws \RuntimeException
+   */
+  abstract protected function nodeTypeMachineName(string $type): string;
+
+  /**
    * Checks if the previousNode was deleted or not.
    *
    * @return bool
