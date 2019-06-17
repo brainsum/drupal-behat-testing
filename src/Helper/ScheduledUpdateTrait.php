@@ -106,6 +106,8 @@ trait ScheduledUpdateTrait {
    */
   protected function reloadScheduledUpdate(): void {
     $sid = $this->scheduledUpdate()->id();
+    // The storage cache is stale in some cases.
+    $this->scheduledUpdateStorage()->resetCache([$sid]);
     /** @var \Drupal\scheduled_updates\ScheduledUpdateInterface $loaded */
     $loaded = $this->scheduledUpdateStorage()->load($sid);
 

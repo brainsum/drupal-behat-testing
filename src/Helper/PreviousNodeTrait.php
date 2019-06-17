@@ -168,6 +168,8 @@ trait PreviousNodeTrait {
    */
   protected function reloadPreviousNode(): void {
     $nid = $this->previousNode()->id();
+    // The storage cache is stale in some cases.
+    $this->nodeStorage()->resetCache([$nid]);
     /** @var \Drupal\node\NodeInterface $loaded */
     $loaded = $this->nodeStorage()->load($nid);
 
