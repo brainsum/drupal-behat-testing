@@ -144,6 +144,23 @@ trait PreviousNodeTrait {
   abstract protected function nodeTypeMachineName(string $type): string;
 
   /**
+   * Loads the previous node.
+   *
+   * @return \Drupal\node\NodeInterface|null
+   *   The node, or NULL.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function loadPreviousNode(): ?NodeInterface {
+    $nid = $this->previousNode()->id();
+    $this->nodeStorage()->resetCache([$nid]);
+    /** @var \Drupal\node\NodeInterface|null $node */
+    $node = $this->nodeStorage()->load($nid);
+    return $node;
+  }
+
+  /**
    * Checks if the previousNode was deleted or not.
    *
    * @return bool
@@ -155,9 +172,7 @@ trait PreviousNodeTrait {
    * @todo: Make this more bulletproof.
    */
   protected function previousNodeWasDeleted(): bool {
-    $nid = $this->previousNode()->id();
-    $loaded = $this->nodeStorage()->load($nid);
-    return $loaded === NULL;
+    return $this->loadPreviousNode() === NULL;
   }
 
   /**
@@ -167,14 +182,11 @@ trait PreviousNodeTrait {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   protected function reloadPreviousNode(): void {
-    $nid = $this->previousNode()->id();
-    // The storage cache is stale in some cases.
-    $this->nodeStorage()->resetCache([$nid]);
     /** @var \Drupal\node\NodeInterface $loaded */
-    $loaded = $this->nodeStorage()->load($nid);
+    $loaded = $this->loadPreviousNode();
 
     if ($loaded === NULL) {
-      throw new RuntimeException("The node ({$nid}) could not be reloaded.");
+      throw new RuntimeException("The node ({$this->previousNode()->id()}) could not be reloaded.");
     }
 
     $this->setPreviousNode($loaded);
