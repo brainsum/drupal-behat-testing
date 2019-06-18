@@ -3,9 +3,9 @@
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
 use Behat\Mink\Driver\DriverInterface;
-use Brainsum\DrupalBehatTesting\Helper\PageResolverTrait;
-use Brainsum\DrupalBehatTesting\Helper\SpinTrait;
-use Brainsum\DrupalBehatTesting\Helper\ViewportTrait;
+use Brainsum\DrupalBehatTesting\Traits\PageResolverTrait;
+use Brainsum\DrupalBehatTesting\Traits\SpinTrait;
+use Brainsum\DrupalBehatTesting\Traits\ViewportTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 

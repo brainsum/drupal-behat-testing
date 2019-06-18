@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\Yaml\Parser;
@@ -9,11 +9,7 @@ use function file_get_contents;
 /**
  * Trait PageResolverTrait.
  *
- * @package Brainsum\DrupalBehatTesting\Helper
- *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
+ * @package Brainsum\DrupalBehatTesting\Traits
  */
 trait PageResolverTrait {
 

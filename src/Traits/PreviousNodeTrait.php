@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Drupal;
 use Drupal\Component\Utility\Crypt;
@@ -12,11 +12,9 @@ use function array_merge;
 /**
  * Class PreviousNodeTrait.
  *
- * @package Brainsum\DrupalBehatTesting\Helper
+ * @package Brainsum\DrupalBehatTesting\Traits
  *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
+ * @todo: Move storage/access code into a service so state can be shared between classes.
  */
 trait PreviousNodeTrait {
 

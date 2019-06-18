@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Driver\Selenium2Driver;
@@ -8,9 +8,7 @@ use Behat\Mink\Driver\Selenium2Driver;
 /**
  * Trait ViewportTrait.
  *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
+ * @package Brainsum\DrupalBehatTesting\Traits
  */
 trait ViewportTrait {
 

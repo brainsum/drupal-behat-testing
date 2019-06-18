@@ -2,7 +2,7 @@
 
 namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 
-use Brainsum\DrupalBehatTesting\Helper\PreviousNodeTrait;
+use Brainsum\DrupalBehatTesting\Traits\PreviousNodeTrait;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use RuntimeException;
 use function count;

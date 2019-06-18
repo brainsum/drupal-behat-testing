@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Exception;
 use RuntimeException;
@@ -9,10 +9,6 @@ use function sleep;
 
 /**
  * Trait SpinTrait.
- *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
  */
 trait SpinTrait {
 

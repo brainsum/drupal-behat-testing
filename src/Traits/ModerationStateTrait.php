@@ -1,13 +1,11 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 /**
  * Trait ModerationStateTrait.
  *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
+ * @todo: Refactor.
  */
 trait ModerationStateTrait {
 

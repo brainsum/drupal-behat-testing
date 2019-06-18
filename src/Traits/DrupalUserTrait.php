@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Drupal;
 use Drupal\DrupalUserManagerInterface;
@@ -13,13 +13,9 @@ use function reset;
 /**
  * Trait DrupalUserTrait.
  *
- * @package Brainsum\DrupalBehatTesting\Helper
+ * @package Brainsum\DrupalBehatTesting\Traits
  *
  * @todo: Move storage/access code into a service so state can be shared between classes.
- *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
  */
 trait DrupalUserTrait {
 

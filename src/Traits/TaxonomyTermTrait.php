@@ -1,6 +1,6 @@
 <?php
 
-namespace Brainsum\DrupalBehatTesting\Helper;
+namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Drupal;
 use Drupal\Component\Utility\Crypt;
@@ -10,9 +10,9 @@ use Drupal\taxonomy\TermStorageInterface;
 /**
  * Class TaxonomyTermTrait.
  *
- * phpcs:disable
- * @deprecated Moved to the Brainsum\DrupalBehatTesting\Traits namespace.
- * phpcs:enable
+ * @package Brainsum\DrupalBehatTesting\Traits
+ *
+ * @todo: Move storage/access code into a service so state can be shared between classes.
  */
 trait TaxonomyTermTrait {
 
