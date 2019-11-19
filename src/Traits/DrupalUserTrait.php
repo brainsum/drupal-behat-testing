@@ -3,7 +3,7 @@
 namespace Brainsum\DrupalBehatTesting\Traits;
 
 use Drupal;
-use Drupal\DrupalUserManagerInterface;
+use Drupal\DrupalExtension\Manager\DrupalUserManagerInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\UserStorageInterface;
 use RuntimeException;
@@ -22,7 +22,7 @@ trait DrupalUserTrait {
   /**
    * The behat user manager from drupal-extension.
    *
-   * @var \Drupal\DrupalUserManagerInterface
+   * @var \Drupal\DrupalExtension\Manager\DrupalUserManagerInterface
    */
   private $behatUserManager;
 
@@ -63,7 +63,7 @@ trait DrupalUserTrait {
   /**
    * Sets the behat user manager.
    *
-   * @var \Drupal\DrupalUserManagerInterface $manager
+   * @var \Drupal\DrupalExtension\Manager\DrupalUserManagerInterface $manager
    *   The behat user manager.
    */
   protected function setBehatUserManager(DrupalUserManagerInterface $manager): void {
@@ -73,7 +73,7 @@ trait DrupalUserTrait {
   /**
    * Returns the behat user manager.
    *
-   * @return \Drupal\DrupalUserManagerInterface
+   * @return \Drupal\DrupalExtension\Manager\DrupalUserManagerInterface
    *   The behat user manager.
    */
   protected function behatUserManager(): DrupalUserManagerInterface {
