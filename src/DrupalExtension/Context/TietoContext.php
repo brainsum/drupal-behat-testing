@@ -5,6 +5,7 @@ namespace Brainsum\DrupalBehatTesting\DrupalExtension\Context;
 use DateInterval;
 use Drupal;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 use RuntimeException;
 
@@ -13,7 +14,7 @@ use RuntimeException;
  *
  * @package Brainsum\DrupalBehatTesting\DrupalExtension\Context
  */
-class TietoContext extends GenericContext {
+class TietoContext extends RawDrupalContext {
 
   /**
    * A date formatted with the tieto date format.
